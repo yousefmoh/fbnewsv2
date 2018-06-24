@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="FBNewsDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="FBNew">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="message" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="created_at" Type="DateTime" Precision="3" />
+    <Property Name="pagename" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="keyword" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="post_id" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="page">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="pagename" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="pagefbid" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="created_at" Type="DateTime" Precision="3" />
+    <Property Name="lastcheckdate" Type="DateTime" Precision="3" />
+    <Property Name="criteriaId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="criteria" Relationship="FBNewsDbModel.FK_pages_critera" FromRole="page" ToRole="criteria" />
+  </EntityType>
+  <EntityContainer Name="FBNewsDbEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="FBNews" EntityType="Self.FBNew" />
+    <EntitySet Name="pages" EntityType="Self.page" />
+    <EntitySet Name="keywords" EntityType="FBNewsDbModel.keyword" />
+    <EntitySet Name="criterias" EntityType="FBNewsDbModel.criteria" />
+    <AssociationSet Name="FK_pages_critera" Association="FBNewsDbModel.FK_pages_critera">
+      <End Role="criteria" EntitySet="criterias" />
+      <End Role="page" EntitySet="pages" />
+    </AssociationSet>
+    <AssociationSet Name="FK_keywords_critera" Association="FBNewsDbModel.FK_keywords_critera">
+      <End Role="criteria" EntitySet="criterias" />
+      <End Role="keyword" EntitySet="keywords" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="keyword">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="keywords" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="cirteriaId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="criteria" Relationship="FBNewsDbModel.FK_keywords_critera" FromRole="keyword" ToRole="criteria" />
+  </EntityType>
+  <EntityType Name="criteria">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="criterianame" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="pages" Relationship="FBNewsDbModel.FK_pages_critera" FromRole="criteria" ToRole="page" />
+    <NavigationProperty Name="keywords" Relationship="FBNewsDbModel.FK_keywords_critera" FromRole="criteria" ToRole="keyword" />
+  </EntityType>
+  <Association Name="FK_pages_critera">
+    <End Type="FBNewsDbModel.criteria" Role="criteria" Multiplicity="1" />
+    <End Type="FBNewsDbModel.page" Role="page" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="criteria">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="page">
+        <PropertyRef Name="criteriaId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_keywords_critera">
+    <End Type="FBNewsDbModel.criteria" Role="criteria" Multiplicity="1" />
+    <End Type="FBNewsDbModel.keyword" Role="keyword" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="criteria">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="keyword">
+        <PropertyRef Name="cirteriaId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

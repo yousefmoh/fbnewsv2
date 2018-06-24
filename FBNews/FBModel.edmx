@@ -1,0 +1,236 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="FBNewsDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="criterias">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="criterianame" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="FBNews">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="message" Type="nvarchar(max)" />
+          <Property Name="created_at" Type="datetime" />
+          <Property Name="pagename" Type="nvarchar(max)" />
+          <Property Name="keyword" Type="nvarchar(max)" />
+          <Property Name="post_id" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="keywords">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="keywords" Type="nvarchar(max)" />
+          <Property Name="cirteriaId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="pages">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="pagename" Type="nvarchar(max)" />
+          <Property Name="pagefbid" Type="nvarchar" MaxLength="100" />
+          <Property Name="created_at" Type="datetime" />
+          <Property Name="lastcheckdate" Type="datetime" />
+          <Property Name="criteriaId" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_keywords_critera">
+          <End Role="criterias" Type="Self.criterias" Multiplicity="1" />
+          <End Role="keywords" Type="Self.keywords" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="criterias">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="keywords">
+              <PropertyRef Name="cirteriaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_pages_critera">
+          <End Role="criterias" Type="Self.criterias" Multiplicity="1" />
+          <End Role="pages" Type="Self.pages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="criterias">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="pages">
+              <PropertyRef Name="criteriaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="FBNewsDbModelStoreContainer">
+          <EntitySet Name="criterias" EntityType="Self.criterias" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FBNews" EntityType="Self.FBNews" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="keywords" EntityType="Self.keywords" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="pages" EntityType="Self.pages" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_keywords_critera" Association="Self.FK_keywords_critera">
+            <End Role="criterias" EntitySet="criterias" />
+            <End Role="keywords" EntitySet="keywords" />
+          </AssociationSet>
+          <AssociationSet Name="FK_pages_critera" Association="Self.FK_pages_critera">
+            <End Role="criterias" EntitySet="criterias" />
+            <End Role="pages" EntitySet="pages" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="FBNewsDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="FBNew">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="message" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="created_at" Type="DateTime" Precision="3" />
+          <Property Name="pagename" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="keyword" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="post_id" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="page">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="pagename" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="pagefbid" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="created_at" Type="DateTime" Precision="3" />
+          <Property Name="lastcheckdate" Type="DateTime" Precision="3" />
+          <Property Name="criteriaId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="criteria" Relationship="FBNewsDbModel.FK_pages_critera" FromRole="page" ToRole="criteria" />
+        </EntityType>
+        <EntityContainer Name="FBNewsDbEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="FBNews" EntityType="Self.FBNew" />
+          <EntitySet Name="pages" EntityType="Self.page" />
+          <EntitySet Name="keywords" EntityType="FBNewsDbModel.keyword" />
+          <EntitySet Name="criterias" EntityType="FBNewsDbModel.criteria" />
+          <AssociationSet Name="FK_pages_critera" Association="FBNewsDbModel.FK_pages_critera">
+            <End Role="criteria" EntitySet="criterias" />
+            <End Role="page" EntitySet="pages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_keywords_critera" Association="FBNewsDbModel.FK_keywords_critera">
+            <End Role="criteria" EntitySet="criterias" />
+            <End Role="keyword" EntitySet="keywords" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="keyword">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="keywords" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="cirteriaId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="criteria" Relationship="FBNewsDbModel.FK_keywords_critera" FromRole="keyword" ToRole="criteria" />
+        </EntityType>
+        <EntityType Name="criteria">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="criterianame" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="pages" Relationship="FBNewsDbModel.FK_pages_critera" FromRole="criteria" ToRole="page" />
+          <NavigationProperty Name="keywords" Relationship="FBNewsDbModel.FK_keywords_critera" FromRole="criteria" ToRole="keyword" />
+        </EntityType>
+        <Association Name="FK_pages_critera">
+          <End Type="FBNewsDbModel.criteria" Role="criteria" Multiplicity="1" />
+          <End Type="FBNewsDbModel.page" Role="page" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="criteria">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="page">
+              <PropertyRef Name="criteriaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_keywords_critera">
+          <End Type="FBNewsDbModel.criteria" Role="criteria" Multiplicity="1" />
+          <End Type="FBNewsDbModel.keyword" Role="keyword" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="criteria">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="keyword">
+              <PropertyRef Name="cirteriaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="FBNewsDbModelStoreContainer" CdmEntityContainer="FBNewsDbEntities">
+          <EntitySetMapping Name="FBNews">
+            <EntityTypeMapping TypeName="FBNewsDbModel.FBNew">
+              <MappingFragment StoreEntitySet="FBNews">
+                <ScalarProperty Name="post_id" ColumnName="post_id" />
+                <ScalarProperty Name="keyword" ColumnName="keyword" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="message" ColumnName="message" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="pagename" ColumnName="pagename" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pages">
+            <EntityTypeMapping TypeName="FBNewsDbModel.page">
+              <MappingFragment StoreEntitySet="pages">
+                <ScalarProperty Name="criteriaId" ColumnName="criteriaId" />
+                <ScalarProperty Name="lastcheckdate" ColumnName="lastcheckdate" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="pagefbid" ColumnName="pagefbid" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="pagename" ColumnName="pagename" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="keywords">
+            <EntityTypeMapping TypeName="FBNewsDbModel.keyword">
+              <MappingFragment StoreEntitySet="keywords">
+                <ScalarProperty Name="cirteriaId" ColumnName="cirteriaId" />
+                <ScalarProperty Name="keywords" ColumnName="keywords" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="criterias">
+            <EntityTypeMapping TypeName="FBNewsDbModel.criteria">
+              <MappingFragment StoreEntitySet="criterias">
+                <ScalarProperty Name="criterianame" ColumnName="criterianame" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="FBNewsDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="criterias">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="criterianame" Type="varchar(max)" />
+  </EntityType>
+  <EntityType Name="FBNews">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="message" Type="nvarchar(max)" />
+    <Property Name="created_at" Type="datetime" />
+    <Property Name="pagename" Type="nvarchar(max)" />
+    <Property Name="keyword" Type="nvarchar(max)" />
+    <Property Name="post_id" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="keywords">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="keywords" Type="nvarchar(max)" />
+    <Property Name="cirteriaId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="pages">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="pagename" Type="nvarchar(max)" />
+    <Property Name="pagefbid" Type="nvarchar" MaxLength="100" />
+    <Property Name="created_at" Type="datetime" />
+    <Property Name="lastcheckdate" Type="datetime" />
+    <Property Name="criteriaId" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_keywords_critera">
+    <End Role="criterias" Type="Self.criterias" Multiplicity="1" />
+    <End Role="keywords" Type="Self.keywords" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="criterias">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="keywords">
+        <PropertyRef Name="cirteriaId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_pages_critera">
+    <End Role="criterias" Type="Self.criterias" Multiplicity="1" />
+    <End Role="pages" Type="Self.pages" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="criterias">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="pages">
+        <PropertyRef Name="criteriaId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="FBNewsDbModelStoreContainer">
+    <EntitySet Name="criterias" EntityType="Self.criterias" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="FBNews" EntityType="Self.FBNews" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="keywords" EntityType="Self.keywords" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="pages" EntityType="Self.pages" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_keywords_critera" Association="Self.FK_keywords_critera">
+      <End Role="criterias" EntitySet="criterias" />
+      <End Role="keywords" EntitySet="keywords" />
+    </AssociationSet>
+    <AssociationSet Name="FK_pages_critera" Association="Self.FK_pages_critera">
+      <End Role="criterias" EntitySet="criterias" />
+      <End Role="pages" EntitySet="pages" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
