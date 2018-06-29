@@ -20,5 +20,8 @@ namespace FBNews
         public string pagename { get; set; }
         public string keyword { get; set; }
         public string post_id { get; set; }
+        public string category { get; set; }
+        public string location { get; set; }
+        public string url { get; set; }
     }
 }

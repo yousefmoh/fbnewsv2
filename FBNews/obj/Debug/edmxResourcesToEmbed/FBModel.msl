@@ -4,6 +4,9 @@
     <EntitySetMapping Name="FBNews">
       <EntityTypeMapping TypeName="FBNewsDbModel.FBNew">
         <MappingFragment StoreEntitySet="FBNews">
+          <ScalarProperty Name="url" ColumnName="url" />
+          <ScalarProperty Name="location" ColumnName="location" />
+          <ScalarProperty Name="category" ColumnName="category" />
           <ScalarProperty Name="post_id" ColumnName="post_id" />
           <ScalarProperty Name="keyword" ColumnName="keyword" />
           <ScalarProperty Name="id" ColumnName="id" />
@@ -16,6 +19,9 @@
     <EntitySetMapping Name="pages">
       <EntityTypeMapping TypeName="FBNewsDbModel.page">
         <MappingFragment StoreEntitySet="pages">
+          <ScalarProperty Name="pageurl" ColumnName="pageurl" />
+          <ScalarProperty Name="category" ColumnName="category" />
+          <ScalarProperty Name="location" ColumnName="location" />
           <ScalarProperty Name="criteriaId" ColumnName="criteriaId" />
           <ScalarProperty Name="lastcheckdate" ColumnName="lastcheckdate" />
           <ScalarProperty Name="created_at" ColumnName="created_at" />

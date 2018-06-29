@@ -17,6 +17,9 @@
     <Property Name="pagename" Type="nvarchar(max)" />
     <Property Name="keyword" Type="nvarchar(max)" />
     <Property Name="post_id" Type="nvarchar(max)" />
+    <Property Name="category" Type="nvarchar(max)" />
+    <Property Name="location" Type="nvarchar(max)" />
+    <Property Name="url" Type="nvarchar(max)" />
   </EntityType>
   <EntityType Name="keywords">
     <Key>
@@ -36,6 +39,9 @@
     <Property Name="created_at" Type="datetime" />
     <Property Name="lastcheckdate" Type="datetime" />
     <Property Name="criteriaId" Type="int" Nullable="false" />
+    <Property Name="location" Type="nvarchar(max)" />
+    <Property Name="category" Type="nvarchar(max)" />
+    <Property Name="pageurl" Type="nvarchar(max)" />
   </EntityType>
   <Association Name="FK_keywords_critera">
     <End Role="criterias" Type="Self.criterias" Multiplicity="1" />

@@ -22,6 +22,9 @@
           <Property Name="pagename" Type="nvarchar(max)" />
           <Property Name="keyword" Type="nvarchar(max)" />
           <Property Name="post_id" Type="nvarchar(max)" />
+          <Property Name="category" Type="nvarchar(max)" />
+          <Property Name="location" Type="nvarchar(max)" />
+          <Property Name="url" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="keywords">
           <Key>
@@ -41,6 +44,9 @@
           <Property Name="created_at" Type="datetime" />
           <Property Name="lastcheckdate" Type="datetime" />
           <Property Name="criteriaId" Type="int" Nullable="false" />
+          <Property Name="location" Type="nvarchar(max)" />
+          <Property Name="category" Type="nvarchar(max)" />
+          <Property Name="pageurl" Type="nvarchar(max)" />
         </EntityType>
         <Association Name="FK_keywords_critera">
           <End Role="criterias" Type="Self.criterias" Multiplicity="1" />
@@ -94,6 +100,9 @@
           <Property Name="pagename" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="keyword" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="post_id" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="category" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="location" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="url" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="page">
           <Key>
@@ -106,6 +115,9 @@
           <Property Name="lastcheckdate" Type="DateTime" Precision="3" />
           <Property Name="criteriaId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="criteria" Relationship="FBNewsDbModel.FK_pages_critera" FromRole="page" ToRole="criteria" />
+          <Property Name="location" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="category" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="pageurl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityContainer Name="FBNewsDbEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="FBNews" EntityType="Self.FBNew" />
@@ -172,6 +184,9 @@
           <EntitySetMapping Name="FBNews">
             <EntityTypeMapping TypeName="FBNewsDbModel.FBNew">
               <MappingFragment StoreEntitySet="FBNews">
+                <ScalarProperty Name="url" ColumnName="url" />
+                <ScalarProperty Name="location" ColumnName="location" />
+                <ScalarProperty Name="category" ColumnName="category" />
                 <ScalarProperty Name="post_id" ColumnName="post_id" />
                 <ScalarProperty Name="keyword" ColumnName="keyword" />
                 <ScalarProperty Name="id" ColumnName="id" />
@@ -184,6 +199,9 @@
           <EntitySetMapping Name="pages">
             <EntityTypeMapping TypeName="FBNewsDbModel.page">
               <MappingFragment StoreEntitySet="pages">
+                <ScalarProperty Name="pageurl" ColumnName="pageurl" />
+                <ScalarProperty Name="category" ColumnName="category" />
+                <ScalarProperty Name="location" ColumnName="location" />
                 <ScalarProperty Name="criteriaId" ColumnName="criteriaId" />
                 <ScalarProperty Name="lastcheckdate" ColumnName="lastcheckdate" />
                 <ScalarProperty Name="created_at" ColumnName="created_at" />

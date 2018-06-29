@@ -20,6 +20,9 @@ namespace FBNews
         public Nullable<System.DateTime> created_at { get; set; }
         public Nullable<System.DateTime> lastcheckdate { get; set; }
         public int criteriaId { get; set; }
+        public string location { get; set; }
+        public string category { get; set; }
+        public string pageurl { get; set; }
     
         public virtual criteria criteria { get; set; }
     }

@@ -10,6 +10,9 @@
     <Property Name="pagename" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="keyword" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="post_id" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="category" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="location" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="url" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="page">
     <Key>
@@ -22,6 +25,9 @@
     <Property Name="lastcheckdate" Type="DateTime" Precision="3" />
     <Property Name="criteriaId" Type="Int32" Nullable="false" />
     <NavigationProperty Name="criteria" Relationship="FBNewsDbModel.FK_pages_critera" FromRole="page" ToRole="criteria" />
+    <Property Name="location" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="category" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="pageurl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityContainer Name="FBNewsDbEntities" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="FBNews" EntityType="Self.FBNew" />
