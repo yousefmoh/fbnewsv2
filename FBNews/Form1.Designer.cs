@@ -55,6 +55,7 @@
             this.textBox9 = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
             this.button12 = new System.Windows.Forms.Button();
+            this.button13 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button4
@@ -310,9 +311,19 @@
             this.button12.Name = "button12";
             this.button12.Size = new System.Drawing.Size(399, 142);
             this.button12.TabIndex = 26;
-            this.button12.Text = "upload file";
+            this.button12.Text = "upload pages sheet";
             this.button12.UseVisualStyleBackColor = true;
             this.button12.Click += new System.EventHandler(this.button12_Click);
+            // 
+            // button13
+            // 
+            this.button13.Location = new System.Drawing.Point(1211, 986);
+            this.button13.Name = "button13";
+            this.button13.Size = new System.Drawing.Size(348, 142);
+            this.button13.TabIndex = 27;
+            this.button13.Text = "upload keywords";
+            this.button13.UseVisualStyleBackColor = true;
+            this.button13.Click += new System.EventHandler(this.button13_Click);
             // 
             // Form1
             // 
@@ -320,6 +331,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(3452, 1448);
+            this.Controls.Add(this.button13);
             this.Controls.Add(this.button12);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.textBox9);
@@ -390,6 +402,7 @@
         private System.Windows.Forms.TextBox textBox9;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Button button12;
+        private System.Windows.Forms.Button button13;
     }
 }
 

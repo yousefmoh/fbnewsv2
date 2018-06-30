@@ -27,8 +27,8 @@ namespace FBNews
         public Form1()
         {
             InitializeComponent();
-      //       FormBorderStyle = FormBorderStyle.None;
-        //    WindowState = FormWindowState.Normal;
+            //       FormBorderStyle = FormBorderStyle.None;
+            //    WindowState = FormWindowState.Normal;
 
             getcriterias();
 
@@ -149,8 +149,8 @@ namespace FBNews
 
             //Task f = Task.Factory.StartNew(() =>
             //{
-                
-           
+
+
 
 
             foreach (criteria criteria in criterias)
@@ -200,25 +200,85 @@ namespace FBNews
                                 {
                                     foreach (string keyword in keywords)
                                     {
-                                        if (message.ToLower().Contains(keyword.ToLower()) && !(fbEntities.FBNews.Any(c => c.post_id == id)))
+                                        string[] splitkeyword = keyword.Split(',');
+
+                                        if (splitkeyword.Length == 1)
                                         {
 
-                                            string [] url = id.Split('_');
-                                            FBNew fb = new FBNew();
-                                            fb.created_at = createdate;
-                                            fb.message = message;
-                                            fb.pagename = page.pagename;
-                                            fb.post_id = id;
-                                           
-                                            fb.location = page.location;
-                                            fb.category = page.category;
-                                            fb.keyword = keyword;
-                                            fb.url = page.pageurl+url[1];
-                                            fbEntities.FBNews.Add(fb);
-                                            fbEntities.SaveChanges();
-                                            postcount++;
+                                            if (message.ToLower().Contains(keyword.ToLower()) && !(fbEntities.FBNews.Any(c => c.post_id == id)))
+                                            {
+
+                                                string[] url = id.Split('_');
+                                                FBNew fb = new FBNew();
+                                                fb.created_at = createdate;
+                                                fb.message = message;
+                                                fb.pagename = page.pagename;
+                                                fb.post_id = id;
+
+                                                fb.location = page.location;
+                                                fb.category = page.category;
+                                                fb.keyword = keyword;
+                                                fb.url = page.pageurl + url[1];
+                                                fbEntities.FBNews.Add(fb);
+                                                fbEntities.SaveChanges();
+                                                postcount++;
+
+
+                                            }
+                                        }
+                                        else if (splitkeyword.Length > 1)
+                                        {
+                                            for (int k = 0; k < splitkeyword.Length; k++)
+                                            {
+                                                if(splitkeyword[k].ToLower().Trim(). Contains("بدون"))
+                                                {
+                                                    if(message.ToLower().Contains(splitkeyword[k].ToLower())
+                                                        &&message.ToLower().Contains(splitkeyword[k-1].ToLower())
+                                                        && !(fbEntities.FBNews.Any(c => c.post_id == id)))
+                                                    {
+                                                        string[] url = id.Split('_');
+                                                        FBNew fb = new FBNew();
+                                                        fb.created_at = createdate;
+                                                        fb.message = message;
+                                                        fb.pagename = page.pagename;
+                                                        fb.post_id = id;
+
+                                                        fb.location = page.location;
+                                                        fb.category = page.category;
+                                                        fb.keyword = keyword;
+                                                        fb.url = page.pageurl + url[1];
+                                                        fbEntities.FBNews.Add(fb);
+                                                        fbEntities.SaveChanges();
+                                                        postcount++;
+                                                    }
+
+                                                }
+                                                else if (message.ToLower().Contains(splitkeyword[k].ToLower()) && !(fbEntities.FBNews.Any(c => c.post_id == id)) )
+                                                {
+                                                    string[] url = id.Split('_');
+                                                    FBNew fb = new FBNew();
+                                                    fb.created_at = createdate;
+                                                    fb.message = message;
+                                                    fb.pagename = page.pagename;
+                                                    fb.post_id = id;
+
+                                                    fb.location = page.location;
+                                                    fb.category = page.category;
+                                                    fb.keyword = splitkeyword[k];
+                                                    fb.url = page.pageurl + url[1];
+                                                    fbEntities.FBNews.Add(fb);
+                                                    fbEntities.SaveChanges();
+                                                    postcount++;
+
+                                                }
+
+                                            }
+
 
                                         }
+
+
+
                                     }
 
                                 }
@@ -281,7 +341,7 @@ namespace FBNews
         {
 
 
-            if (listView1.SelectedItems.Count==0)
+            if (listView1.SelectedItems.Count == 0)
             {
                 MessageBox.Show("Please choose  criteria");
                 return;
@@ -289,7 +349,7 @@ namespace FBNews
             string key = "";
             int criteriaId = int.Parse(listView1.SelectedItems[0].SubItems[0].Text);
 
-            
+
 
             keyword keyword = new keyword();
             if (textBox4.Text == null)
@@ -347,7 +407,7 @@ namespace FBNews
                 MessageBox.Show("Please make sure that you inserted all values");
                 return;
             }
-           
+
 
             string pageid = "";
             string pagename = "";
@@ -374,7 +434,7 @@ namespace FBNews
             page.location = textBox8.Text;
             page.pageurl = textBox9.Text;
             page.criteriaId = criteriaId;
-            
+
 
 
             fbEntities.pages.Add(page);
@@ -467,7 +527,7 @@ namespace FBNews
             var dcriteria = fbEntities.criterias.Where(c => c.id == criteriaId).SingleOrDefault();
             var dkeywords = fbEntities.keywords.Where(c => c.cirteriaId == criteriaId).ToList();
             var dpages = fbEntities.pages.Where(c => c.criteriaId == criteriaId).ToList();
-            foreach(keyword keyword in dkeywords)
+            foreach (keyword keyword in dkeywords)
             {
                 if (keyword != null)
                 {
@@ -485,7 +545,7 @@ namespace FBNews
                 }
             }
 
-            
+
             if (dcriteria != null)
             {
                 fbEntities.criterias.Remove(dcriteria);
@@ -493,7 +553,7 @@ namespace FBNews
             }
             getcriterias();
             clearlist();
-            
+
         }
 
         private void clearlist()
@@ -557,6 +617,11 @@ namespace FBNews
         {
 
 
+            OpenFileDialog("pages");
+        }
+
+        public void OpenFileDialog(string type)
+        {
             string filePath = string.Empty;
             string fileExt = string.Empty;
             OpenFileDialog file = new OpenFileDialog(); //open dialog to choose file  
@@ -569,10 +634,12 @@ namespace FBNews
                     try
                     {
                         DataTable dtExcel = new DataTable();
-                    
-                        ReadExcel(filePath, fileExt); //read excel file  
-                      //  dataGridView1.Visible = true;
-                      //  dataGridView1.DataSource = dtExcel;
+
+                        if (type == "pages")
+                            ReadPagesExcel(filePath, fileExt); //read excel file  
+                        else if(type=="keywords")
+                            ReadKeywordsExcel(filePath, fileExt);
+
                     }
                     catch (Exception ex)
                     {
@@ -583,10 +650,10 @@ namespace FBNews
                 {
                     MessageBox.Show("Please choose .xls or .xlsx file only.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Error); //custom messageBox to show error  
                 }
-            }  
+            }
         }
 
-        public void ReadExcel(string fileName, string fileExt)
+        public void ReadPagesExcel(string fileName, string fileExt)
         {
             int count = 0;
             if (listView1.SelectedItems.Count == 0)
@@ -596,9 +663,9 @@ namespace FBNews
             }
 
             int criteriaId = int.Parse(listView1.SelectedItems[0].SubItems[0].Text);
-         
-            
-            bool first=true;
+
+
+            bool first = true;
             string conn = string.Empty;
             string exceltype = string.Empty;
             DataTable dtexcel = new DataTable();
@@ -620,14 +687,14 @@ namespace FBNews
                     oleAdpt.Fill(dtexcel); //fill excel data into dataTable  
                     foreach (DataRow row in dtexcel.Rows)
                     {
-                        if(exceltype=="a2007"&&first)
+                        if (exceltype == "a2007" && first)
                         {
                             first = false;
                             continue;
-                          
-                       
+
+
                         }
-                        var  pageid= row[0].ToString() ;
+                        var pageid = row[0].ToString();
                         var pagename = row[1].ToString();
                         var location = row[2].ToString();
                         var category = row[3].ToString();
@@ -639,25 +706,93 @@ namespace FBNews
                     }
                     //MessageBox.Show(dtexcel.Columns + "");
                 }
-                catch (Exception ex) {
-                    
+                catch (Exception ex)
+                {
+
                     count++;
                 }
             }
-            if( count==0)
-            MessageBox.Show(" All Pages Added Sucessfully ");
+            if (count == 0)
+                MessageBox.Show(" All Pages Added Sucessfully ");
             else
                 MessageBox.Show(" Some Pages Added Sucessfully ");
 
-           // return dtexcel;
+            // return dtexcel;
         }
-  
-        public void Addpage(string pageid,string pagename,string pagecategory,string pagelocation,string pageurl,int criteriaId)
+
+
+        public void ReadKeywordsExcel(string fileName, string fileExt)
+        {
+            int count = 0;
+            if (listView1.SelectedItems.Count == 0)
+            {
+                MessageBox.Show("Please choose  criteria");
+                return;
+            }
+
+            int criteriaId = int.Parse(listView1.SelectedItems[0].SubItems[0].Text);
+
+
+            bool first = true;
+            string conn = string.Empty;
+            string exceltype = string.Empty;
+            DataTable dtexcel = new DataTable();
+            if (fileExt.CompareTo(".xls") == 0)
+            {
+                conn = @"provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + fileName + ";Extended Properties='Excel 8.0;HRD=Yes;IMEX=1';"; //for below excel 2007  
+                exceltype = "b2007";
+            }
+            else
+            {
+                conn = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + fileName + ";Extended Properties='Excel 12.0;HDR=NO';"; //for above excel 2007  
+                exceltype = "a2007";
+            }
+            using (OleDbConnection con = new OleDbConnection(conn))
+            {
+                try
+                {
+                    OleDbDataAdapter oleAdpt = new OleDbDataAdapter("select * from [Sheet1$]", con); //here we read data from sheet1  
+                    oleAdpt.Fill(dtexcel); //fill excel data into dataTable  
+                    foreach (DataRow row in dtexcel.Rows)
+                    {
+                        if (exceltype == "a2007" && first)
+                        {
+                            first = false;
+                            continue;
+
+
+                        }
+                        var keyword = row[0].ToString();
+
+
+                        AddKeyword(keyword, criteriaId);
+
+                        //criteriaId	location	category	pageurl
+
+                    }
+                    //MessageBox.Show(dtexcel.Columns + "");
+                }
+                catch (Exception ex)
+                {
+
+                    count++;
+                }
+            }
+            if (count == 0)
+                MessageBox.Show(" All Pages Added Sucessfully ");
+            else
+                MessageBox.Show(" Some Pages Added Sucessfully ");
+
+            // return dtexcel;
+        }
+
+
+        public void Addpage(string pageid, string pagename, string pagecategory, string pagelocation, string pageurl, int criteriaId)
         {
             page page = new page();
 
-           
-           
+
+
             page.pagefbid = pageid;
             page.pagename = pagename;
             page.category = pagecategory;
@@ -669,8 +804,28 @@ namespace FBNews
 
             fbEntities.pages.Add(page);
             fbEntities.SaveChanges();
-           // if (fbEntities.SaveChanges() == 1)
-              //  MessageBox.Show("Added Sucessfully ");
+            // if (fbEntities.SaveChanges() == 1)
+            //  MessageBox.Show("Added Sucessfully ");
+        }
+
+
+        public void AddKeyword(string keyword,int criteriaId)
+        {
+            keyword akeyword = new keyword();
+
+            akeyword.keywords = keyword;
+            
+            akeyword.cirteriaId = criteriaId;
+            fbEntities.keywords.Add(akeyword);
+            fbEntities.SaveChanges();
+            // if (fbEntities.SaveChanges() == 1)
+            //  MessageBox.Show("Added Sucessfully ");
+        }
+
+        private void button13_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog("keywords");
+
         }
 
 
